@@ -8,12 +8,16 @@ def percepcion(jugadorPos, mapa, cajasPos, metas):
 
       if cajaCercana(i, nuevaPos, cajasPos): #Verifica si hay 2 cajas en fila hacia esa dirección
         continue
-      
-      if cajaEnMeta(nuevaPos, cajasPos, metas):#Verifica si la caja que se tiene delante se puede mover o no
+
+      if cajaContraPared(i, nuevaPos, cajasPos, mapa):
         continue
+
+      #if cajaEnMeta(nuevaPos, cajasPos, metas):#Verifica si la caja que se tiene delante se puede mover o no
+        #continue
 
       if mapa[nuevaPos[0]][nuevaPos[1]] == 'W':
         continue
+        
       elif i == [-1, 0]:
         movesResult.append('U')
       elif i == [1, 0]:
@@ -25,7 +29,7 @@ def percepcion(jugadorPos, mapa, cajasPos, metas):
     #print(movesResult)
     return movesResult
 
-def cajaEnMeta(nuevaPos, cajasPos, metas):
+"""def cajaEnMeta(nuevaPos, cajasPos, metas):
   enMeta = False
   for caja in cajasPos: 
       if nuevaPos == caja:
@@ -34,7 +38,7 @@ def cajaEnMeta(nuevaPos, cajasPos, metas):
             enMeta = True
           else:
             enMeta
-  return enMeta
+  return enMeta"""
     
 def cajaCercana(movimiento, nuevaPos, cajasPos):
     otraCaja = False
@@ -48,8 +52,15 @@ def cajaCercana(movimiento, nuevaPos, cajasPos):
             otraCaja
     return otraCaja
 
-def camino():
-    return 1
+def camino(nodo):
+  camino = []
+  camino.append(nodo.direccion)
+  siguienteNodo = nodo.padre
+  while siguienteNodo.padre != 'N':
+    camino.append(siguienteNodo.direccion)
+    siguienteNodo = siguienteNodo.padre
+  camino = camino[::-1]
+  return camino
 
 #retorna true o false si las cajas están en la posición de las metas          
 def victoria(metas, cajasPos):
@@ -62,7 +73,7 @@ def victoria(metas, cajasPos):
     gano = False
   return gano
 
-def movPlayer(movimiento, jugadorPos, cajasPos):
+def moverJugador(movimiento, jugadorPos, cajasPos):
                   #UP,     DONW,   LEFT,    RIGHT
   #movimientos = [[-1, 0], [1, 0], [0, -1], [0, 1]]
   switcher = {
@@ -72,12 +83,19 @@ def movPlayer(movimiento, jugadorPos, cajasPos):
     'D': [jugadorPos[0]+1,jugadorPos[1]]
   }
   nuevaPos = switcher.get(movimiento,"NO")
+  return nuevaPos
 
-  for i in range(len(cajasPos)):
-    if nuevaPos == cajasPos[i]:
-      move = [nuevaPos[0] - jugadorPos[0], nuevaPos[1] - jugadorPos[1]]
-      caja = cajasPos[i]
-      nuevaPosCaja = [move[0] + caja[0], move[1] + caja[1]]
-      cajasPos[i] = nuevaPosCaja
+def moverCaja(move, caja):
+  nuevaPosCaja = [move[0] + caja[0], move[1] + caja[1]]
+  return nuevaPosCaja
 
-  return nuevaPos, cajasPos
+def cajaContraPared(movimiento, nuevaPos, cajasPos, mapa):
+  pared = False
+  for caja in cajasPos:
+    if nuevaPos == caja:
+      posiblePared = moverCaja(movimiento, caja)
+      if mapa[posiblePared[0]][posiblePared[1]] == 'W':
+        pared = True
+      else:
+        pared
+  return pared
