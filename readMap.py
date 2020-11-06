@@ -4,6 +4,7 @@ def leerMapa():
     mapa = []
     output = []
     jugadorPos = []
+    metas = []
     cajasPos = []
     for line in sys.stdin:
         line = line.rstrip()
@@ -11,11 +12,26 @@ def leerMapa():
             mapa.append(line)
         else:
             output.append(line)
-        
-    jugadorPos = output[0]
-    for i in range(1, len(output)):
-        cajasPos.append(output[i])
 
-    return jugadorPos, cajasPos, mapa      
+    for i in range(len(mapa)):
+        for j in range(len(mapa[i])):
+            if mapa[i][j] == 'X':
+                metas.append([i,j])
+
+    temporal  = output[0].split(',') # ['1','2']
+    for i in temporal:
+        jugadorPos.append(int(i))
+
+    for i in range(1, len(output)):
+        temporalCajas = output[i].split(',')
+        cajasPos.append(convertirInt(temporalCajas))
+
+    return jugadorPos, cajasPos, mapa, metas      
     #print(jugadorPos, cajasPos, mapa)
  
+
+def convertirInt(listaStrings):
+    listaResult = []
+    for i in listaStrings:
+        listaResult.append(int(i))
+    return listaResult
