@@ -28,9 +28,10 @@ def percepcion(jugadorPos, mapa, cajasPos, metas):
         movesResult.append('L')
       elif i == [0, 1]:
         movesResult.append('R')
-    #print(movesResult)
+
     return movesResult
 
+#expande un nodo basandose en sus percepciones
 def expandir(nodo):
   nodos = []
   listaMovimientos = percepcion(nodo.jugadorPos, nodo.mapa, nodo.cajasPos, nodo.metas) 
@@ -61,6 +62,7 @@ def expandir(nodo):
 
   return nodos
 
+#verifica si existe otra caja hacia la dirección que se va mover una caja
 def cajaCercana(movimiento, nuevaPos, cajasPos):
     otraCaja = False
     for i in cajasPos: 
@@ -95,6 +97,8 @@ def moverJugador(movimiento, jugadorPos):
   nuevaPos = switcher.get(movimiento,"NO")
   return nuevaPos
 
+
+#retorna el camino desde un nodo dado hasta el nodo raíz
 def camino(nodo):
   camino = []
   camino.append(nodo.direccion)
@@ -106,6 +110,7 @@ def camino(nodo):
   del camino[0]
   return camino
 
+#Verifica si hay bucles
 def ciclos(nodo):
   padre = nodo.padre
   while padre != 'N':
@@ -115,10 +120,13 @@ def ciclos(nodo):
       padre = padre.padre
   return False
 
+#cambia la posición de una caja
 def moverCaja(move, caja):
   nuevaPosCaja = [move[0] + caja[0], move[1] + caja[1]]
   return nuevaPosCaja
 
+
+#verifica si al mover una caja, esta va a quedar en una esquina
 def cajaEnEsquina(movimiento, nuevaPos, cajaPos, metas, mapa): 
                   #UP,     DONW,   LEFT,    RIGHT
   #movimientos = [[-1, 0], [1, 0], [0, -1], [0, 1]]
@@ -149,7 +157,7 @@ def cajaEnEsquina(movimiento, nuevaPos, cajaPos, metas, mapa):
             return False
 
 
-
+#Verifica si la caja que se va mover está al lado de una pared
 def cajaContraPared(movimiento, nuevaPos, cajasPos, mapa):
   pared = False
   for caja in cajasPos:
