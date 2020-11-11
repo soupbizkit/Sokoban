@@ -1,18 +1,32 @@
 from readMap import *
 from BFS import * 
 from Functions import *
+from DFS import *
+from IDFS import *
+import sys
 
 if __name__ == '__main__':
 
+
+    print(sys.argv[1])
+
     jugadorPos, cajasPos, mapa, metas = leerMapa()
-    print(jugadorPos, cajasPos, mapa, metas)
     nodoRaiz = Node(jugadorPos, cajasPos, 'N', 'N',  0, mapa, metas)
-    listaNodos = []
-    listaNodos.append(nodoRaiz)
-    caminoBFS = busquedaPorAnchura(listaNodos)
-    #caminoDFS = busquedaPorProfundidad(nodoRaiz)
-    #caminoIDFS = busquedaPorProfunidadIterativa(nodoRaiz)
-    #def __init__(self, jugadorPos, cajasPos, direccion, padre, profundidad):
-    print(caminoBFS)
+    nodos = []
+    nodos.append(nodoRaiz)
+
+    if(sys.argv[1] == "BFS"):
+        caminoBFS = busquedaPorAnchura(nodos)
+        print("camino BFS", caminoBFS)
+    if(sys.argv[1] == "DFS"):
+        caminoDFS = busquedaPorProfundidad(nodos)
+        print("camino DFS",caminoDFS)
+    if(sys.argv[1] == "IDFS"):
+        caminoIDFS = busquedaPorProfunidadIterativa(nodos)
+        print("camino IDFS", caminoIDFS)
+    
+    
+    
+    
     
 

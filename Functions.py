@@ -1,3 +1,5 @@
+from Node import *
+
 def percepcion(jugadorPos, mapa, cajasPos, metas):
                     #UP,     DONW,   LEFT,    RIGHT
     movimientos = [[-1, 0], [1, 0], [0, -1], [0, 1]]
@@ -29,6 +31,35 @@ def percepcion(jugadorPos, mapa, cajasPos, metas):
     #print(movesResult)
     return movesResult
 
+def expandir(nodo):
+  nodos = []
+  listaMovimientos = percepcion(nodo.jugadorPos, nodo.mapa, nodo.cajasPos, nodo.metas) 
+  for move in listaMovimientos: #['R','D']
+    nuevaPosJugador = moverJugador(move, nodo.jugadorPos)
+    listaCajas = []
+    for caja in nodo.cajasPos:
+      if nuevaPosJugador == caja:
+        if move == 'R':
+          movimiento = [0,1]
+        if move == 'L':
+          movimiento = [0,-1]
+        if move == 'D':
+          movimiento = [1,0]
+        if move == 'U':
+          movimiento = [-1,0]
+        nuevaPosCaja = moverCaja(movimiento, caja) 
+        listaCajas.append(nuevaPosCaja)
+
+      else:
+        listaCajas.append(caja)    
+    nuevoNodo = Node(nuevaPosJugador, listaCajas , move, nodo, nodo.profundidad + 1, nodo.mapa, nodo.metas)
+
+    if ciclos(nuevoNodo):
+      continue
+    else:
+      nodos.append(nuevoNodo)
+
+  return nodos
 
 def cajaCercana(movimiento, nuevaPos, cajasPos):
     otraCaja = False

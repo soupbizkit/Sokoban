@@ -10,10 +10,14 @@ def busquedaPorAnchura(nodos):
         if victoria(nodo.metas, nodo.cajasPos):
           return camino(nodo)
           
-        if ciclos(nodo):
-          continue
+        """if ciclos(nodo):
+          continue"""
         if nodo.profundidad <= 64:
-          listaMovimientos = percepcion(nodo.jugadorPos, nodo.mapa, nodo.cajasPos,nodo.metas) ##['D','L', 'R']
+          listaNodos = expandir(nodo)
+          for nodo in listaNodos:
+              nodos.append(nodo)
+
+          """listaMovimientos = percepcion(nodo.jugadorPos, nodo.mapa, nodo.cajasPos,nodo.metas) ##['D','L', 'R']
           
           for move in listaMovimientos:
             nuevaPosJugador = moverJugador(move, nodo.jugadorPos)
@@ -35,6 +39,6 @@ def busquedaPorAnchura(nodos):
                 listaCajas.append(caja)
             
             nuevoNodo = Node(nuevaPosJugador, listaCajas , move,
-            nodo, nodo.profundidad + 1, nodo.mapa, nodo.metas)
+            nodo, nodo.profundidad + 1, nodo.mapa, nodo.metas)"""
 
-            nodos.append(nuevoNodo)
+            
