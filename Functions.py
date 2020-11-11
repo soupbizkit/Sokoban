@@ -9,13 +9,13 @@ def percepcion(jugadorPos, mapa, cajasPos, metas):
       if cajaCercana(i, nuevaPos, cajasPos): #Verifica si hay 2 cajas en fila hacia esa dirección
         continue
 
-      if cajaContraPared(i, nuevaPos, cajasPos, mapa):
+      if cajaContraPared(i, nuevaPos, cajasPos, mapa): #Verifica si al mover una caja en una dirección hay una pared
         continue
 
-      #if cajaEnMeta(nuevaPos, cajasPos, metas):#Verifica si la caja que se tiene delante se puede mover o no
-        #continue
+      if cajaEnEsquina(i, nuevaPos, cajasPos, metas,mapa): #Verifica si la caja quedará en una esquina
+        continue
 
-      if mapa[nuevaPos[0]][nuevaPos[1]] == 'W':
+      if mapa[nuevaPos[0]][nuevaPos[1]] == 'W': #si la nueva posición es una pared
         continue
         
       elif i == [-1, 0]:
@@ -29,17 +29,7 @@ def percepcion(jugadorPos, mapa, cajasPos, metas):
     #print(movesResult)
     return movesResult
 
-"""def cajaEnMeta(nuevaPos, cajasPos, metas):
-  enMeta = False
-  for caja in cajasPos: 
-      if nuevaPos == caja:
-        for meta in metas:
-          if caja == meta:
-            enMeta = True
-          else:
-            enMeta
-  return enMeta"""
-    
+
 def cajaCercana(movimiento, nuevaPos, cajasPos):
     otraCaja = False
     for i in cajasPos: 
@@ -52,28 +42,17 @@ def cajaCercana(movimiento, nuevaPos, cajasPos):
             otraCaja
     return otraCaja
 
-def camino(nodo):
-  camino = []
-  camino.append(nodo.direccion)
-  siguienteNodo = nodo.padre
-  while siguienteNodo.padre != 'N':
-    camino.append(siguienteNodo.direccion)
-    siguienteNodo = siguienteNodo.padre
-  camino = camino[::-1]
-  return camino
 
 #retorna true o false si las cajas están en la posición de las metas          
 def victoria(metas, cajasPos):
-  gano = False
-  sortedCajas= sorted(cajasPos)
-  sortedMetas = sorted(metas)
-  if sortedCajas == sortedMetas:
-    gano = True
+  metasSort = sorted(metas)
+  cajasSort = sorted(cajasPos)
+  if metasSort == cajasSort:
+    return True
   else:
-    gano = False
-  return gano
+    return False
 
-def moverJugador(movimiento, jugadorPos, cajasPos):
+def moverJugador(movimiento, jugadorPos):
                   #UP,     DONW,   LEFT,    RIGHT
   #movimientos = [[-1, 0], [1, 0], [0, -1], [0, 1]]
   switcher = {
@@ -85,9 +64,60 @@ def moverJugador(movimiento, jugadorPos, cajasPos):
   nuevaPos = switcher.get(movimiento,"NO")
   return nuevaPos
 
+def camino(nodo):
+  camino = []
+  camino.append(nodo.direccion)
+  siguienteNodo = nodo.padre
+  while siguienteNodo != 'N':
+      camino.append(siguienteNodo.direccion)
+      siguienteNodo = siguienteNodo.padre
+  camino = camino[::-1]
+  del camino[0]
+  return camino
+
+def ciclos(nodo):
+  padre = nodo.padre
+  while padre != 'N':
+    if nodo.jugadorPos == padre.jugadorPos and nodo.cajasPos == padre.cajasPos:
+      return True
+    else:
+      padre = padre.padre
+  return False
+
 def moverCaja(move, caja):
   nuevaPosCaja = [move[0] + caja[0], move[1] + caja[1]]
   return nuevaPosCaja
+
+def cajaEnEsquina(movimiento, nuevaPos, cajaPos, metas, mapa): 
+                  #UP,     DONW,   LEFT,    RIGHT
+  #movimientos = [[-1, 0], [1, 0], [0, -1], [0, 1]]
+  for caja in cajaPos:
+    if caja == nuevaPos:
+      nuevaPosCaja = [movimiento[0] + caja[0], movimiento[1] + caja[1]]
+
+      for meta in metas:
+        if nuevaPosCaja == meta:
+          return False
+        else:
+        #esquina superior izquierda
+          if mapa[nuevaPosCaja[0]][nuevaPosCaja[1]-1]=='W' and mapa[nuevaPosCaja[0]-1][nuevaPosCaja[1]]=='W':
+            return True
+
+          #esquina superior derecha
+          elif mapa[nuevaPosCaja[0]][nuevaPosCaja[1]+1]=='W' and mapa[nuevaPosCaja[0]-1][nuevaPosCaja[1]]=='W':
+            return True
+
+          #esquina inferior izquierda
+          elif mapa[nuevaPosCaja[0]][nuevaPosCaja[1]-1]=='W' and mapa[nuevaPosCaja[0]+1][nuevaPosCaja[1]]=='W':
+            return True
+          
+          #esquina inferior derecha
+          elif mapa[nuevaPosCaja[0]][nuevaPosCaja[1]+1]=='W' and mapa[nuevaPosCaja[0]+1][nuevaPosCaja[1]]=='W':
+            return True
+          else:
+            return False
+
+
 
 def cajaContraPared(movimiento, nuevaPos, cajasPos, mapa):
   pared = False

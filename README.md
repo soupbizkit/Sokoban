@@ -3,4 +3,4 @@ Implementación de algoritmos de búsqueda por anchura, búsqueda por profundida
 \
 Para correr el programa debe utilizarse el siguiente formato : `python main.py < (archivo a leer)`\
 **EJEMPLO:**
->*python main.py < nivel2.txt*
+>*python main.py < nivel2.txt* 
