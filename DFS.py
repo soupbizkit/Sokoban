@@ -5,7 +5,6 @@ from Functions import *
 def busquedaPorProfundidad(node, estados, path):
     while (node):
         nodo = node[0]
-        print(nodo.profundidad)
         estados.append([nodo.jugadorPos, nodo.cajasPos])
         del node[0]
         if victoria(nodo.metas, nodo.cajasPos):
