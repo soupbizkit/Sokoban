@@ -2,14 +2,28 @@
 from Node import Node
 from Functions import *
 
-def busquedaPorProfundidad(node):
-    while(node):
-        nodo = node[0]
-        del node[0]
+estados = []
+path = []
 
+def busquedaPorProfundidad(node, estados, path):
+    while (node):
+        nodo = node[0]
+        print(nodo.profundidad)
+        estados.append([nodo.jugadorPos, nodo.cajasPos])
+        del node[0]
+        #print("Posicion del jugador", nodo.jugadorPos, nodo.cajasPos)
         if victoria(nodo.metas, nodo.cajasPos):
-            return(camino(nodo))
-        if nodo.profundidad <= 64:
-            nuevosNodos = expandir(nodo)
-            for nodo in nuevosNodos:
-                node.insert(0, nodo)
+            path.append(camino(nodo))
+        else:
+            if nodo.profundidad <= 64:
+                nuevosNodos = expandir(nodo)
+                for j, nuevo_nodo in enumerate(nuevosNodos):
+                    if [nuevo_nodo.jugadorPos, nuevo_nodo.cajasPos] not in estados:
+                        node.insert(j, nuevo_nodo)
+
+                busquedaPorProfundidad(node, estados, path)
+
+    if len(path) == 0:
+        return path
+    else:
+        return path[0]

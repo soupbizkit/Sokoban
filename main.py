@@ -19,7 +19,10 @@ if __name__ == '__main__':
         caminoBFS = busquedaPorAnchura(nodos)
         print("camino BFS", caminoBFS)
     if(sys.argv[1] == "DFS"):
-        caminoDFS = busquedaPorProfundidad(nodos)
+        print("jugador:",jugadorPos)
+        print("cajas:",cajasPos)
+        print("metas:",metas)
+        caminoDFS = busquedaPorProfundidad(nodos, [], [])
         print("camino DFS",caminoDFS)
     if(sys.argv[1] == "IDFS"):
         caminoIDFS = busquedaPorProfunidadIterativa(nodos)
