@@ -2,9 +2,6 @@
 from Node import Node
 from Functions import *
 
-estados = []
-path = []
-
 def busquedaPorProfundidad(node, estados, path):
     while (node):
         nodo = node[0]
