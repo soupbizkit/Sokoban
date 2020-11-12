@@ -11,7 +11,6 @@ def busquedaPorProfundidad(node, estados, path):
         print(nodo.profundidad)
         estados.append([nodo.jugadorPos, nodo.cajasPos])
         del node[0]
-        #print("Posicion del jugador", nodo.jugadorPos, nodo.cajasPos)
         if victoria(nodo.metas, nodo.cajasPos):
             path.append(camino(nodo))
         else:
